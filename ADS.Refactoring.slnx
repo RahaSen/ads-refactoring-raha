@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ADS.Refactoring.Tests/ADS.Refactoring.Tests.csproj" />
+  <Project Path="ADS.Refactoring/ADS.Refactoring.csproj" />
+</Solution>
