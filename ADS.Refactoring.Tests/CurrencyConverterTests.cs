@@ -32,4 +32,21 @@ public class CurrencyConverterTests
     {
         Assert.Throws<NotSupportedException>(() => _converter.ConvertToUsd(100m, "CHF"));
     }
+
+    [Theory]
+    [InlineData("eur")]
+    [InlineData("Eur")]
+    public void ConvertToUsd_CurrencyCodeIsCaseInsensitive(string currency)
+    {
+        var result = _converter.ConvertToUsd(100m, currency);
+        Assert.Equal(110m, result);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void ConvertToUsd_MissingCurrency_Throws(string currency)
+    {
+        Assert.Throws<ArgumentException>(() => _converter.ConvertToUsd(100m, currency));
+    }
 }
