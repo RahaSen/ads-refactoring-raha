@@ -1,4 +1,5 @@
-﻿using ADS.Refactoring.Repositories;
+﻿using System.Globalization;
+using ADS.Refactoring.Repositories;
 using ADS.Refactoring.Services;
 using ADS.Refactoring.Writers;
 
@@ -38,7 +39,7 @@ try
         $"Report generated successfully: {reportFilePath}");
 
     Console.WriteLine(
-        $"Total revenue in USD: {totalUsd:F2}");
+        $"Total revenue in USD: {totalUsd.ToString("F2", CultureInfo.InvariantCulture)}");
 }
 catch (Exception ex)
 {

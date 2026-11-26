@@ -1,4 +1,6 @@
-﻿namespace ADS.Refactoring.Writers;
+﻿using System.Globalization;
+
+namespace ADS.Refactoring.Writers;
 
 public sealed class ReportWriter
 {
@@ -12,7 +14,7 @@ public sealed class ReportWriter
         {
             $"Monatlicher Verkaufsbericht ({month:D2}/{year})",
             "---------------------------------",
-            $"Gesamt Umsatz in USD: {totalUsd:F2}"
+            $"Gesamt Umsatz in USD: {totalUsd.ToString("F2", CultureInfo.InvariantCulture)}"
         };
 
         File.WriteAllLines(filePath, reportRows);
