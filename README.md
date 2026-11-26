@@ -21,6 +21,26 @@ Der ursprüngliche `ReportService` enthielt mehrere Verantwortlichkeiten innerha
 
 Ziel war es, diese Verantwortlichkeiten klar zu trennen und die Business-Logik besser wartbar und testbar zu machen.
 
+Der unveränderte Ausgangscode liegt zum Vergleich unter `docs/original/ReportService.cs.txt`.
+
+## Gefundene Fehler im Originalcode
+
+Neben der Struktur enthielt der Ausgangscode mehrere Fehler, die im Zuge des Refactorings behoben wurden:
+
+- **Kompiliert nicht:** `total` wird ohne Initialisierung verwendet, `lines` ist nicht definiert (gemeint ist `reportRows`), und nach dem Listen-Initializer sowie nach `Console.WriteLine(...)` fehlt jeweils das Semikolon.
+- **Report wird in der Schleife geschrieben:** Die Datei wird pro Verkauf neu geschrieben. Für einen Monat ohne Verkäufe entsteht dadurch gar kein Report.
+- **Unbekannte Währungen werden still ignoriert:** Der Gesamtumsatz wäre in diesem Fall falsch, ohne dass es auffällt.
+- **`double` für Geldbeträge:** führt zu Rundungsfehlern.
+- **Fehlende Null-Prüfung:** `JsonSerializer.Deserialize` kann `null` liefern.
+- **Tippfehler im Titel:** Die schließende Klammer in `({month}/{year}` fehlt.
+
+## Bewusste Abweichungen vom Original
+
+- Für einen Monat ohne Verkäufe wird ein Report mit Gesamtumsatz `0.00` geschrieben.
+- Der Betrag wird immer mit zwei Nachkommastellen und Punkt als Dezimaltrenner ausgegeben, unabhängig von der Spracheinstellung des Rechners.
+- Der Monat wird im Titel und im Dateinamen zweistellig ausgegeben (`report_2026_05.txt`).
+- Die Report-Datei wird neben der Anwendung abgelegt (`AppContext.BaseDirectory`), nicht im aktuellen Arbeitsverzeichnis.
+
 ## Struktur
 
 - `Models/Sale.cs` – Datenmodell für Verkäufe
@@ -46,7 +66,7 @@ Nicht unterstützte Währungen werden nicht still ignoriert, sondern führen zu 
 
 ### Testbarkeit
 
-Die Währungsumrechnung und die Berechnung des monatlichen Gesamtumsatzes werden mit xUnit Unit Tests überprüft.
+Die Währungsumrechnung, die Berechnung des monatlichen Gesamtumsatzes und die Report-Ausgabe werden mit xUnit Unit Tests überprüft. Abgedeckt sind auch die Randfälle: Monat ohne Verkäufe, ungültiger Monat, nicht unterstützte oder fehlende Währung und abweichende Schreibweise des Währungscodes.
 
 ## Anwendung starten
 
